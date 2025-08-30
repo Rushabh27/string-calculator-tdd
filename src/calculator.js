@@ -1,5 +1,19 @@
 function escapeRegExp(s) {
-    return s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function parseHeaderDelimiters(header) {
+    // header could be single like ';' or bracketed like '[***]' or '[*][%]' (multi)
+    if (!header.startsWith('[')) return [header];
+    const delims = [];
+    let buf = '';
+    let inBr = false;
+    for (const ch of header) {
+        if (ch === '[') { inBr = true; buf = ''; }
+        else if (ch === ']') { inBr = false; delims.push(buf); buf = ''; }
+        else if (inBr) { buf += ch; }
+    }
+    return delims;
 }
 
 function add(numbers) {
@@ -11,10 +25,11 @@ function add(numbers) {
 
     if (input.startsWith('//')) {
         const nl = input.indexOf('\n');
-        const raw = input.slice(2, nl); // e.g. ';' or '[***]' etc.
-        // for now support single-char or bracketed; pattern updated in later steps
-        delimiterPattern = new RegExp(escapeRegExp(raw));
+        const header = input.slice(2, nl);
         input = input.slice(nl + 1);
+        const delims = parseHeaderDelimiters(header);
+        const pattern = delims.map(d => escapeRegExp(d)).join('|');
+        delimiterPattern = new RegExp(pattern);
     }
 
     const tokens = input.split(delimiterPattern).filter(t => t.length > 0);
