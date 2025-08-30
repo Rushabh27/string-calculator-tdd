@@ -2,12 +2,14 @@ function add(numbers) {
     if (numbers === "") return 0;
     if (/^-?\d+$/.test(numbers)) return parseInt(numbers);
 
-    // generic comma separated numbers
-    const parts = numbers.split(',');
-    if (parts.every(p => /^-?\d+$/.test(p))) {
-        return parts.reduce((s, p) => s + Number(p), 0);
+    // split by comma or newline
+    const tokens = numbers.split(/,|\n/).filter(t => t.length > 0);
+    if (!tokens.every(t => /^-?\d+$/.test(t))) {
+        throw new Error('invalid input');
     }
-    return 0;
+
+    return tokens.reduce((sum, t) => sum + Number(t), 0);
+
 }
 
 module.exports = { add };
