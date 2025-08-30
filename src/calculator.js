@@ -21,7 +21,13 @@ function add(numbers) {
     console.log(tokens);
     if (!tokens.every(t => /^-?\d+$/.test(t))) throw new Error('invalid input');
 
-    return tokens.reduce((sum, t) => sum + Number(t), 0);
+    const values = tokens.map(Number);
+    const negatives = values.filter(n => n < 0);
+    if (negatives.length) {
+        throw new Error(`negative numbers not allowed: ${negatives.join(', ')}`);
+    }
+
+    return values.reduce((sum, n) => sum + n, 0);
 }
 
 module.exports = { add };
