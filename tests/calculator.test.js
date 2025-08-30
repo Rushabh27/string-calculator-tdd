@@ -1,0 +1,13 @@
+const { add } = require('../src/calculator');
+
+describe('String Calculator', () => {
+    test('returns 0 for empty string', () => {
+        expect(add("")).toBe(0);
+    });
+    test('returns the number for a single numeric string', () => {
+        expect(add("7")).toBe(7);
+    });
+    test('sums two comma-separated numbers', () => {
+        expect(add("1,5")).toBe(6);
+    });
+});
