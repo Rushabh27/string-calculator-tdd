@@ -2,10 +2,10 @@ function add(numbers) {
     if (numbers === "") return 0;
     if (/^-?\d+$/.test(numbers)) return parseInt(numbers);
 
-    // simple comma handling for two numbers (will generalize next)
+    // generic comma separated numbers
     const parts = numbers.split(',');
-    if (parts.length === 2 && parts.every(p => /^-?\d+$/.test(p))) {
-        return Number(parts[0]) + Number(parts[1]);
+    if (parts.every(p => /^-?\d+$/.test(p))) {
+        return parts.reduce((s, p) => s + Number(p), 0);
     }
     return 0;
 }

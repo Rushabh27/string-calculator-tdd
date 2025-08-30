@@ -10,4 +10,8 @@ describe('String Calculator', () => {
     test('sums two comma-separated numbers', () => {
         expect(add("1,5")).toBe(6);
     });
+    test('sums any amount of comma-separated numbers', () => {
+        expect(add("1,2,3,4")).toBe(10);
+    });
+
 });
